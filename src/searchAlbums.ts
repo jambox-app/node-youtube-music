@@ -28,14 +28,12 @@ export const parseSearchAlbumsBody = (body: any): AlbumPreview[] => {
 
 export async function searchAlbums(
   query: string,
-  options?: { proxy?: string }
+  options?: { proxy?: HttpsProxyAgent }
 ): Promise<AlbumPreview[]> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/search?alt=json&key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30',
     {
-      agent: options?.proxy
-        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
-        : undefined,
+      agent: options?.proxy ? { https: options.proxy } : undefined,
       json: {
         ...context.body,
         params: 'EgWKAQIYAWoKEAkQAxAEEAUQCg%3D%3D',

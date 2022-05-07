@@ -10,15 +10,13 @@ export async function getArtist(
   options?: {
     lang: string;
     country: string;
-    proxy?: string;
+    proxy?: HttpsProxyAgent;
   }
 ): Promise<Artist> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/browse?key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30',
     {
-      agent: options?.proxy
-        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
-        : undefined,
+      agent: options?.proxy ? { https: options.proxy } : undefined,
       json: {
         ...context.body,
         browseId: artistId,

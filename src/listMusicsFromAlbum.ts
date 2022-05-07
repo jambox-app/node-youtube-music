@@ -32,15 +32,13 @@ export const parseListMusicsFromAlbumBody = (body: any): MusicVideo[] => {
 export async function listMusicsFromAlbum(
   albumId: string,
   options?: {
-    proxy?: string;
+    proxy?: HttpsProxyAgent;
   }
 ): Promise<MusicVideo[]> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/browse?alt=json&key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30',
     {
-      agent: options?.proxy
-        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
-        : undefined,
+      agent: options?.proxy ? { https: options.proxy } : undefined,
       json: {
         ...context.body,
         browseId: albumId,

@@ -45,15 +45,13 @@ export const parseGetSuggestionsBody = (body: {
 export async function getSuggestions(
   videoId: string,
   options?: {
-    proxy?: string;
+    proxy?: HttpsProxyAgent;
   }
 ): Promise<MusicVideo[]> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/next',
     {
-      agent: options?.proxy
-        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
-        : undefined,
+      agent: options?.proxy ? { https: options.proxy } : undefined,
       json: {
         ...context.body,
         enablePersistentPlaylistPanel: true,

@@ -31,15 +31,13 @@ export async function searchPlaylists(
   query: string,
   options?: {
     onlyOfficialPlaylists?: boolean;
-    proxy?: string;
+    proxy?: HttpsProxyAgent;
   }
 ): Promise<PlaylistPreview[]> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/search?alt=json&key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30',
     {
-      agent: options?.proxy
-        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
-        : undefined,
+      agent: options?.proxy ? { https: options.proxy } : undefined,
       json: {
         ...context.body,
         params: 'EgWKAQIoAWoKEAoQAxAEEAUQCQ%3D%3D',
