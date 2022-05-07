@@ -37,7 +37,7 @@
     "test": "yarn build && jest"
   },
   "dependencies": {
-    "got": "^12.0.4",
+    "got": "^11.8.3",
     "hpagent": "^1.0.0"
   }
 }
