@@ -1,40 +1,44 @@
 import got from 'got';
 import context from './context';
 import { ArtistPreview } from './models';
-import {parseArtistSearchResult} from './parsers'
-
+import { parseArtistSearchResult } from './parsers';
+import { HttpsProxyAgent } from 'hpagent';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const parseArtistsSearchBody = (body: any): ArtistPreview[] =>{
-  const {contents} = body.contents.tabbedSearchResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents.pop().musicShelfRenderer
-  const results: ArtistPreview[] = []
+export const parseArtistsSearchBody = (body: any): ArtistPreview[] => {
+  const {
+    contents,
+  } = body.contents.tabbedSearchResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents.pop().musicShelfRenderer;
+  const results: ArtistPreview[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  contents.forEach((content: any)=> {
+  contents.forEach((content: any) => {
     try {
       const artist = parseArtistSearchResult(content);
       if (artist) {
         results.push(artist);
       }
-    }
-    catch(err) {
+    } catch (err) {
       console.error(err);
     }
   });
   return results;
-}
-
+};
 
 export async function searchArtists(
-    query: string,
-    options?:{
-      lang?: string;
-      country?: string;
-    }
+  query: string,
+  options?: {
+    lang?: string;
+    country?: string;
+    proxy?: string;
+  }
 ): Promise<ArtistPreview[]> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/search?alt=json&key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30',
     {
+      agent: options?.proxy
+        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
+        : undefined,
       json: {
         ...context.body,
         params: 'EgWKAQIgAWoKEAMQBBAJEAoQBQ%3D%3D',
@@ -42,16 +46,14 @@ export async function searchArtists(
       },
       headers: {
         'User-Agent':
-        'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+          'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
         'Accept-Language': options?.lang ?? 'en',
         origin: 'https://music.youtube.com',
       },
     }
-  )
+  );
   try {
-    return parseArtistsSearchBody(
-      JSON.parse(response.body),
-    );
+    return parseArtistsSearchBody(JSON.parse(response.body));
   } catch (e) {
     console.error(e);
     return [];

@@ -11,17 +11,18 @@
   "author": "Baptiste Arnaud <contact@baptiste-arnaud.fr>",
   "license": "MIT",
   "devDependencies": {
-    "@types/jest": "^26.0.21",
-    "@typescript-eslint/eslint-plugin": "^4.18.0",
-    "@typescript-eslint/parser": "^4.18.0",
-    "eslint": "^7.22.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "jest": "^26.6.3",
-    "prettier": "^2.2.1",
-    "ts-jest": "^26.5.4",
-    "typescript": "^4.2.3"
+    "@types/jest": "^27.5.0",
+    "@types/node": "^17.0.31",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint": "^8.15.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "jest": "^28.1.0",
+    "prettier": "^2.6.2",
+    "ts-jest": "^28.0.1",
+    "typescript": "^4.6.4"
   },
   "scripts": {
     "start:example:search": "yarn build && node dist/examples/search",
@@ -31,10 +32,12 @@
     "start:example:searchArtists": "yarn build && node dist/examples/searchArtists",
     "start:example:getPlaylist": "yarn build && node dist/examples/getPlaylist",
     "start:example:getAlbum": "yarn build && node dist/examples/getAlbum",
-    "build": "eslint src/**/* examples/**/* && tsc",
+    "build": "tsc",
+    "prepare": "yarn build",
     "test": "yarn build && jest"
   },
   "dependencies": {
-    "got": "^11.8.2"
+    "got": "^12.0.4",
+    "hpagent": "^1.0.0"
   }
 }

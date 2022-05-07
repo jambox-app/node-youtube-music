@@ -2,6 +2,7 @@ import got from 'got';
 import { MusicVideo } from './models';
 import { parseSuggestionItem } from './parsers';
 import context from './context';
+import { HttpsProxyAgent } from 'hpagent';
 
 export const parseGetSuggestionsBody = (body: {
   contents: {
@@ -41,10 +42,18 @@ export const parseGetSuggestionsBody = (body: {
   return results;
 };
 
-export async function getSuggestions(videoId: string): Promise<MusicVideo[]> {
+export async function getSuggestions(
+  videoId: string,
+  options?: {
+    proxy?: string;
+  }
+): Promise<MusicVideo[]> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/next',
     {
+      agent: options?.proxy
+        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
+        : undefined,
       json: {
         ...context.body,
         enablePersistentPlaylistPanel: true,

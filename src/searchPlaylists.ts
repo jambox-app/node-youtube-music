@@ -1,4 +1,5 @@
 import got from 'got';
+import { HttpsProxyAgent } from 'hpagent';
 import context from './context';
 import { PlaylistPreview } from './models';
 import { parsePlaylistItem } from './parsers';
@@ -30,11 +31,15 @@ export async function searchPlaylists(
   query: string,
   options?: {
     onlyOfficialPlaylists?: boolean;
+    proxy?: string;
   }
 ): Promise<PlaylistPreview[]> {
   const response = await got.post(
     'https://music.youtube.com/youtubei/v1/search?alt=json&key=AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30',
     {
+      agent: options?.proxy
+        ? { https: new HttpsProxyAgent({ proxy: options?.proxy }) }
+        : undefined,
       json: {
         ...context.body,
         params: 'EgWKAQIoAWoKEAoQAxAEEAUQCQ%3D%3D',
